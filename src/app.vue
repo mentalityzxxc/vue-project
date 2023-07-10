@@ -1,9 +1,9 @@
 <script setup>
-import InordicComponent from './components/inordic-component.vue'
+import Board from './components/bord.vue'
 </script>
 
 <template>
-  <InordicComponent />
+  <Board test='test props'/>
 </template>
 
 <style scoped>
