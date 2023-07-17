@@ -82,10 +82,66 @@
             ],
             currentWallpaper: 0,
             activeMenu: false,
+            list: [
+              {
+                id: '1',
+                title: 'Купить доски',
+              },
+              {
+                id: '2',
+                title: 'нанять строителей',
+              },
+              {
+                id: '3',
+                title: 'покрасить стены',
+              }
+            ],
+            inprogress: [
+              {
+               id: '4',
+                title: 'закупить инструменты',
+              },
+              {
+                id: '5',
+                title: 'заказать стеклопакет',
+              },
+              {
+                id: '6',
+                title: 'заказать мебель',
+              }
+            ],
+             done: [
+              {
+                id: '7',
+                title: 'выплатить ЗП',
+              },
+              {
+                id: '8',
+                title: 'оформить документы',
+              },
+              {
+                id: '9',
+                title: 'сделать фото отчет',
+              }
+            ],
             };
         },
         props: ['test'],
         methods: {
+               handlerDragend(event, type){
+            let Element = document.elementFromPoint(event.x, event.y)
+           // console.log(element)
+            if(Element.getAttribute('class') == 'drop-zone') {
+              const id = event.target.getAttribute('id')
+              let arrayFrom = this[type];
+              let element = arrayFrom.find(el => el.id == id)            
+              let filterNewArray = arrayFrom.filter(el => el.id !== id)
+              this[type] = filterNewArray
+              let arrayTo = Element.getAttribute('name')
+              this[arrayTo].unshift(element);
+              //console.log(type)
+            }
+          },  
           changeBackground(number){
             this.currentWallpaper = number
             this.activeMenu = false;
@@ -122,6 +178,72 @@
       {{'<'}}
     </div>
   </div>
+      <section class='board-content'>
+          <h2>
+           Надо сделать
+          </h2>
+          <input placeholder='Новый товар'
+          class='new-todo todo-item'
+          >
+          <div class='drop-zone'
+          name='list'>
+          <img src='public/assets/cursor.png'>
+          </div>
+          <ul class='todo-list board__column'>
+          <li class='todo-item shoping__item'
+           v-for="(item, index) in list"
+          :key="item.id"
+          draggable="true"
+          @dragend="handlerDragend($event, 'list')"
+          :id='item.id'>
+           {{ item.title }}
+          </li>
+          </ul>
+      </section>
+      <section class='board-content'>
+          <h2>
+           В процессе
+          </h2>
+          <input placeholder='Новый товар'
+          class='new-todo todo-item'
+          >
+          <div class='drop-zone'
+          name='inprogress'>
+          <img src='public/assets/cursor.png'>
+          </div>
+          <ul class='todo-list board__column'>
+          <li class='todo-item shoping__item'
+           v-for="(item, index) in inprogress"
+          :key="item.id"
+          draggable="true"
+          @dragend="handlerDragend($event, 'inprogress')"
+          :id='item.id'>
+           {{ item.title }}
+          </li>
+          </ul>
+      </section>
+            <section class='board-content'>
+          <h2>
+           Выполнено
+          </h2>
+          <input placeholder='Новый товар'
+          class='new-todo todo-item'
+          >
+          <div class='drop-zone'
+          name='done'>
+          <img src='public/assets/cursor.png'>
+          </div>
+          <ul class='todo-list board__column'>
+          <li class='todo-item shoping__item'
+           v-for="(item, index) in done"
+          :key="item.id"
+          draggable="true"
+          @dragend="handlerDragend($event, 'done')"
+          :id='item.id'>
+           {{ item.title }}
+          </li>
+          </ul>
+      </section>
     </div>
 </div>
 </template>
