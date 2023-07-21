@@ -1,9 +1,13 @@
 <script>
+import BoardColumn from "./board-coloumn.vue"
+import Menu from "./menu.vue"
     export default {
         'name':"board",
         data(){
             return{
             hello:"privet",
+            boards: [
+            ],
             wallpapers:[
                 "https://i.pinimg.com/originals/b3/cf/82/b3cf8221bf35baf3d4faa68473811fc9.jpg",
                 "https://www.passion.ru/thumb/1500x0/filters:quality(75):no_upscale()/imgs/2022/03/24/16/5323877/30c1e09df2ea3734f0635eb503b486865d338c36.jpg",
@@ -124,6 +128,7 @@
                 title: 'сделать фото отчет',
               }
             ],
+              newTask: null,
             };
         },
         props: ['test'],
@@ -154,8 +159,20 @@
             } else {
               this.activeMenu = true;
             }
+          },
+          addTask(task, columnName){
+              //console.log(task)
+              const taskObject = {
+                id: Math.random(),
+                title: task,
+              }
+              this[columnName].push(taskObject)
           }
-        }
+        },
+      components: {
+      'board-column' : BoardColumn,
+      'Menu' : Menu
+      }
     }
 </script>
 
@@ -178,72 +195,9 @@
       {{'<'}}
     </div>
   </div>
-      <section class='board-content'>
-          <h2>
-           Надо сделать
-          </h2>
-          <input placeholder='Новый товар'
-          class='new-todo todo-item'
-          >
-          <div class='drop-zone'
-          name='list'>
-          <img src='public/assets/cursor.png'>
-          </div>
-          <ul class='todo-list board__column'>
-          <li class='todo-item shoping__item'
-           v-for="(item, index) in list"
-          :key="item.id"
-          draggable="true"
-          @dragend="handlerDragend($event, 'list')"
-          :id='item.id'>
-           {{ item.title }}
-          </li>
-          </ul>
-      </section>
-      <section class='board-content'>
-          <h2>
-           В процессе
-          </h2>
-          <input placeholder='Новый товар'
-          class='new-todo todo-item'
-          >
-          <div class='drop-zone'
-          name='inprogress'>
-          <img src='public/assets/cursor.png'>
-          </div>
-          <ul class='todo-list board__column'>
-          <li class='todo-item shoping__item'
-           v-for="(item, index) in inprogress"
-          :key="item.id"
-          draggable="true"
-          @dragend="handlerDragend($event, 'inprogress')"
-          :id='item.id'>
-           {{ item.title }}
-          </li>
-          </ul>
-      </section>
-            <section class='board-content'>
-          <h2>
-           Выполнено
-          </h2>
-          <input placeholder='Новый товар'
-          class='new-todo todo-item'
-          >
-          <div class='drop-zone'
-          name='done'>
-          <img src='public/assets/cursor.png'>
-          </div>
-          <ul class='todo-list board__column'>
-          <li class='todo-item shoping__item'
-           v-for="(item, index) in done"
-          :key="item.id"
-          draggable="true"
-          @dragend="handlerDragend($event, 'done')"
-          :id='item.id'>
-           {{ item.title }}
-          </li>
-          </ul>
-      </section>
+  <board-column :addTask="addTask" :taskModel="newTask" title="Надо сделать" :items="list" name="list" :handlerDragend="handlerDragend"></board-column>
+  <board-column :addTask="addTask" :taskModel="newTask" title="В процессе" :items="inprogress" name="inprogress" :handlerDragend="handlerDragend"></board-column>
+  <board-column :addTask="addTask" :taskModel="newTask" title="Сделано" :items="done" name="done" :handlerDragend="handlerDragend"></board-column>         
     </div>
 </div>
 </template>
@@ -259,15 +213,6 @@
     align-items: center;
     color: black;
     background-color: rgba(255, 255, 255, 0.9);
-  }
-  .board{
-      display: flex;
-      justify-content: center;
-      position: absolute;
-      width: 100%;
-      left: 0;
-      top: 0;
-      height: 100%;
   }
   .wallpapers__item {
       display: inline-block;
@@ -297,6 +242,9 @@
   .board__theme-wrapper--active{
     left: 0px;
   }
+  .board {
+    display: flex;
+  }
   .board__button-change-theme{
     background-color: rgba(255,255,255,0.25);
     color: white;
@@ -318,56 +266,10 @@
     max-width: 50px;
     margin-right: 10px;
   }
-  .drop-zone{ 
-    background: white;
-      height: 150px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-  }
-  .drop-zone img{
-    max-width: 50px;
-    margin: 10px;
-  }
-  body {
-    font-family: "Source Sans Pro", "Arial", sans-serif;
-  }
-  * {
-    box-sizing: border-box;
-  }
-  .board section{
-    width: 30%;
-    margin: 5px;
-  }
-  .todo-list {
-    list-style-type: none;
-    padding: 10px;
-  }
+ 
   .done {
     text-decoration: line-through;
     color: #888;
-  }
-  .new-todo {
-    width: 100%;
-  }
-  .trash-drop {
-    border: 2px dashed #ccc !important;
-    text-align: center;
-    color: #e33;
-  }
-  .trash-drop:-moz-drag-over {
-    border: 2px solid red;
-  }
-  .todo-item {
-    position: relative;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    padding: 14px 8px;
-    margin-bottom: 3px;
-    background-color: #fff;
-    box-shadow: 1px 2px 2px #ccc;
-    font-size: 22px;
-    color: black;
   }
   .remove-item {
     float: right;
@@ -384,45 +286,5 @@
     justify-content: center;
     align-items: center;
   }
-  .remove-item:hover{
-    opacity: 1;
-  }
-  .board {
-    display: flex;
-  }
-  .board__column{
-    background-color: #ededed;
-    text-align: center;
-    min-width: 100%;
-    min-height: 80vh;
-  }
-  .board__column--in-stock{
-    width: 30%;
-    min-width: 300px;
-  }
-  .shoping__img{
-    max-width: 50px;
-    margin-right: 20px;
-  }
-  ul{
-    list-style: none;
-  }
-  .shoping__item{
-    background-color: white;
-    color: black;
-    margin: 15px 0;
-    padding: 10px;
-    border-radius: 15px;
-  }
-  .shoping__item a{
-    display: flex;
-    align-items: center;
-    color: black;
-  }
-  .shoping__item:hover{
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  }
-  .shoping__title{
-    font-size: 24px;
-  }
+
   </style>
