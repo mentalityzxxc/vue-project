@@ -1,9 +1,34 @@
-<script setup>
+<script>
 import Board from './components/bord.vue'
+import Login from './components/login.vue'
+
+export default{
+  'name' : "App",
+    data(){
+        return {
+          isAuth: false,
+          users: [{
+              login:'admin',
+              password:'admin'
+          }
+          ]
+        }
+    },
+  components:{
+    Board,
+    Login
+  },
+  methods: {
+    login(){
+      console.log('авторизация')
+    }
+  },
+}
 </script>
 
 <template>
-  <Board test='test props'/>
+  <Board test='test props' v-if="isAuth"/>
+  <login :hendlerLogin="login" v-else/>
 </template>
 
 <style scoped>
