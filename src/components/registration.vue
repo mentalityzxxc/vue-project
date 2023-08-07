@@ -1,6 +1,6 @@
 <script>
 export default {
-    name: "Login",
+    name: "registration",
     data() {
         return {
             login: '',
@@ -10,33 +10,35 @@ export default {
     methods: {
         onSubmit(){
             //alert('Отправка формы')
-            this.handlerLogin(
+            this.handlerRegistration(
                 this.login,
                 this.password
             )
         }
     },
-    props: ['handlerLogin', 'error', 'swither'] 
+    props: ['handlerRegistration', 'error', 'swither']
 }
 </script>
 
 <template>
 <div class="container">
   <div class="form">
-    <h1>Авторизация</h1>
+    <h1>Регистрация</h1>
     <form v-on:submit.prevent="onSubmit">
         <input v-model='login' placeholder="Введите логин" name="login" class='login' type="text" />
         <input v-model='password' placeholder="Введите пароль" name="passord" class='password' type="password" />
-        <input type="submit" class='enter' value='Войти' />
+        <input type="submit" class='enter' value='Зарегестрироваться' />
         {{this.error}}
     </form>
     <div class='button-container'>
-        <button @click="swither('auth')" class='is-active'>
+        <div class='button-container'>
+        <button @click="swither('auth')">
             Авторизация
         </button>
-        <button @click="swither('reg')">
+        <button @click="swither('reg')" class='is-active'>
             Регистрация
         </button>
+    </div>
     </div>
   </div>
  </div>
@@ -56,7 +58,7 @@ export default {
     background-image: url(../../public/assets/theme/3.jpeg);
 }
 .form {
-    background-color: rgba(000,000,000, 0.6);
+    background-color: rgba(4, 4, 4, 0.532);
     width: 600px;
     height: 600px;
     display: flex;
