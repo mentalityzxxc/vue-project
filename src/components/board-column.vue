@@ -2,7 +2,10 @@
     export default {
         name: "BoardColumn",
         data() {
-
+            return {
+                renderCount: 0,
+                checkedTask: 0
+            }
         },
         props: [
             'title', 
@@ -15,7 +18,33 @@
             'editTask'
         ],
         methods: {
-
+            update(){
+                this.renderCount = this.renderCount + 1;
+                //Вызываем функцию, для подсчета выделенных задач и обновляем состояние
+                //Которое отвечает за вывод количества выделенных задач
+                this.checkedTask = this.getColumnCheckedCount();
+            },
+            //Метод, который возвращает количество задач в колонке
+            getColumnCount(){
+                //Получаем количество объектов в колонке 
+                let countInColumn = this.items.length;
+                //Возвращаем длинну
+                return countInColumn
+            },
+            //Метод, который получает выбранные элементы
+            getColumnCheckedCount(){
+                //Заведем переменную в которую запишем все выделенные задачи
+                let checkedTasks = this.items.filter(function(item){
+                    //Проверяем, что задача выбрана и возвращаем в отфильтрованный массив
+                    if (item.checked) {
+                        // Возвращаем в отфильтрованный массив элеменит, если он выбран
+                        // Галочка в значении true
+                        return item
+                    }
+                })
+                //Возвращаем количество выранных задач
+                return checkedTasks.length;
+            }
         }
     }
 </script>
@@ -37,6 +66,11 @@
           >
             <img src='public/assets/cursor.png'>
           </div>
+          <p class='check-task'>Количество задач: {{getColumnCount()}}</p>
+          <p class='check-task'>Выделено задач: {{checkedTask}}</p>
+          <p class='check-task'>
+            Пользователь выбрал задачу из колонки {{renderCount}} количество раз
+          </p>
           <ul class='todo-list board__column'>
               <li 
                 class='todo-item shoping__item'
@@ -50,12 +84,22 @@
                 <div>
                     <button @click="editTask(item.id, name)">Редактировать</button>
                     <button @click="delTask(item.id, name)">Удалить</button>
+                    <p>
+                        <label>
+                            Выделить
+                            <input type='checkbox' @click='update' :checked='item.checked' v-model='item.checked'/>
+                        </label>
+                    </p>
                 </div>
               </li>
           </ul>
       </section>
 </template>
 <style scoped>
+.check-task{
+    color: white;
+    font-size: 20px;
+}
 body{
     font-family: "Source Sans Pro", "Arial", sans-serif;
 }

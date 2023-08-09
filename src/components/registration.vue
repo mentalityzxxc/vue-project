@@ -49,16 +49,15 @@ export default {
     outline: 1px solid red;
 }
 .container {
-    background-color: rgba(255,255,255, 0.4);
+    background-color: rgba(255,255,255, 0.6);
     height: 100vh;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url(../../public/assets/theme/3.jpeg);
 }
 .form {
-    background-color: rgba(4, 4, 4, 0.532);
+    background-color: rgba(000,000,000, 0.8);
     width: 600px;
     height: 600px;
     display: flex;

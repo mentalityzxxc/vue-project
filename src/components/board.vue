@@ -86,27 +86,32 @@
               list: [
                 {
                   id: '1',
-                  title: 'Купить доски'
+                  title: 'Купить доски',
+                  checked: true,
                 },
                 {
                   id: '2',
-                  title: 'Нанять строителей'
+                  title: 'Нанять строителей',
+                  checked: false,
                 },
                 {
                   id: '3',
-                  title: 'Заплатить за аренду'
+                  title: 'Заплатить за аренду',
+                  checked: true,
                 },
               ],
               inprogress: [
                 {
                   id: '4',
-                  title: 'Закупить инструменты'
+                  title: 'Закупить инструменты',
+                  checked: true,
                 },
               ],
               done: [
                 {
                   id: '5',
-                  title: 'Рассчитать денежные средства'
+                  title: 'Рассчитать денежные средства',
+                  checked: true,
                 },
               ],
               newTask: null,
@@ -204,12 +209,43 @@
             console.log(title)
             const newTitle = prompt('Введите новое название задачи', title);
             //Перебираем еще раз колонку задач для редактирования
+            
+            //Предварительно, создадим новый массив для обновленных данных
+            let newArray = [];
+            //Перебираем выбранную колнку с задачами
             this[columnName].forEach(function(task, index){
                 //Ищем задачу по передаваемому идентификатору
-                if(task.id == idTask) {
-                  this[columnName][index] = newTitle
+                //Создаем новый объект для нового массива на каждом повторении цикла
+                //Создаю НОВЫЙ пустой объект и далее заполяю его
+                let objectTask = {}
+                //Записываю в поле ID идентификатор перебираемоей задачи
+                objectTask.id = task.id;
+                //Если идентификатор, совпал с тем, что я передал из параметра метода, то я в новый объект, записываю новый заголовок
+                if(task.id == idTask){
+                  //Так не сработало обновление интерфейса!
+                  //this[columnName][index].title = newTitle
+                  objectTask.title = newTitle;
+                }else{
+                  //Если условие не прошло оставляем старый заголовок
+                  objectTask.title = task.title;
                 }
+
+                /* 
+                Усложненный пример (аналог)
+                let task = {
+                  id: task.id,
+                  title: task.id == idTask ? newTitle : task.title
+                }
+                */
+
+               //Запушить в новый массив новый объект
+               //Эдентичные по своей задаче записи
+               //Обе добавляют объекты в массив
+               //newArray[index] = task
+               newArray.push(objectTask)
             })
+            //Заменяем существующий массив колонки с задачами на новый, обработаный
+            this[columnName] = newArray
           }
         },
         //Регистрируем внешний компонент внутри родительского
@@ -301,7 +337,7 @@
     width: 200px;
     display: flex;
     align-items: center;
-    z-index: 3;
+    z-index: 2;
     padding: 5px;
   }
   .avatar{
