@@ -53,9 +53,10 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    background-image: url(../../public/assets/theme/3.jpeg);
 }
 .form {
-    background-color: rgba(000,000,000, 0.8);
+    background-color: rgba(000,000,000, 0.7);
     width: 600px;
     height: 600px;
     display: flex;
@@ -70,7 +71,7 @@ export default {
 }
 form {
     padding: 55px;
-    background: white;
+    background: rgba(000,000,000, 0.2);
     text-align: center;
 }
 

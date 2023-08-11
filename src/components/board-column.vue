@@ -1,12 +1,7 @@
 <script>
     export default {
         name: "BoardColumn",
-        data() {
-            return {
-                renderCount: 0,
-                checkedTask: 0
-            }
-        },
+        data() { return {}},
         props: [
             'title', 
             'items', 
@@ -15,41 +10,27 @@
             'taskModel', 
             'addTask', 
             'delTask', 
-            'editTask'
+            'editTask',
+            'checked',
         ],
         methods: {
-            update(){
-                this.renderCount = this.renderCount + 1;
-                //Вызываем функцию, для подсчета выделенных задач и обновляем состояние
-                //Которое отвечает за вывод количества выделенных задач
-                this.checkedTask = this.getColumnCheckedCount();
+            debugger(value){
+                console.log(value)
             },
-            //Метод, который возвращает количество задач в колонке
-            getColumnCount(){
-                //Получаем количество объектов в колонке 
-                let countInColumn = this.items.length;
-                //Возвращаем длинну
-                return countInColumn
-            },
-            //Метод, который получает выбранные элементы
-            getColumnCheckedCount(){
-                //Заведем переменную в которую запишем все выделенные задачи
-                let checkedTasks = this.items.filter(function(item){
-                    //Проверяем, что задача выбрана и возвращаем в отфильтрованный массив
-                    if (item.checked) {
-                        // Возвращаем в отфильтрованный массив элеменит, если он выбран
-                        // Галочка в значении true
-                        return item
-                    }
-                })
-                //Возвращаем количество выранных задач
-                return checkedTasks.length;
+            getCountCheckedColumn(){
+                console.log(this.checked[this.name])
+                const countCheckTask = this.checked[this.name].filter(function(element){
+                    return element == true
+                
+                }).length  
+                return countCheckTask
             }
         }
-    }
+        }
 </script>
 <template>
     <section class='board-content'>
+        
           <h2>
             {{title}}
           </h2>
@@ -66,11 +47,8 @@
           >
             <img src='public/assets/cursor.png'>
           </div>
-          <p class='check-task'>Количество задач: {{getColumnCount()}}</p>
-          <p class='check-task'>Выделено задач: {{checkedTask}}</p>
-          <p class='check-task'>
-            Пользователь выбрал задачу из колонки {{renderCount}} количество раз
-          </p>
+          <p class='check-task'>Количество задач: {{this.items.length}}</p>
+          <p class='check-task'>Выделено задач: {{this.getCountCheckedColumn()}}</p>   
           <ul class='todo-list board__column'>
               <li 
                 class='todo-item shoping__item'
@@ -87,7 +65,13 @@
                     <p>
                         <label>
                             Выделить
-                            <input type='checkbox' @click='update' :checked='item.checked' v-model='item.checked'/>
+                            <input
+                             type='checkbox' 
+                             v-model='checked[name][index]'
+                             :name="item.title"
+                             :id="item.id"
+                             :key="item.id"
+                             />
                         </label>
                     </p>
                 </div>

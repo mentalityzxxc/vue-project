@@ -4,6 +4,11 @@
         'name': "Board",
         data() {
             return {
+              checked:{
+                list  :[],
+                inprogress: [],
+                done: [],
+              },
               boards: {
 
               },
@@ -92,7 +97,7 @@
                 {
                   id: '2',
                   title: 'Нанять строителей',
-                  checked: false,
+                  checked: true,
                 },
                 {
                   id: '3',
@@ -119,6 +124,23 @@
         },
         props: ['test', 'user', 'logout'],
         methods: { 
+          getTaskCheckedCount(){
+                let checkedCountInList = this.checked['list'].filter(function(element){
+                        return element == true
+                    
+                    }).length
+
+                let checkedCountInInprogress = this.checked['inprogress'].filter(function(element){
+                    return element == true
+                
+                }).length
+
+                let checkedCountInDone = this.checked['done'].filter(function(element){
+                    return element == true
+                    
+                }).length  
+                return   checkedCountInList + checkedCountInInprogress + checkedCountInDone    
+          },
           handlerDragend(event, type){
             console.log('handlerDragend');
             //console.log(event.target.getAttribute('id'));
@@ -257,12 +279,17 @@
 
 <template>
   <div>
-    <div class='board' :style="{'background-image': `url(${wallpaper[currentWallpaper]})` }"> 
-
+    <div class='board' :style="{'background-image': `url(${wallpaper[currentWallpaper]})` }">  
       <button class='board__button-change-theme' @click='openCloseMenu'>
          <img :src='wallpaper[currentWallpaper]' />
          Сменить фон
       </button>
+    <div>
+      Общее количество задач:{{ this.list.length + this.done.length + this.inprogress.length }}
+    </div>
+    <div>
+      Общее количество выделенных задач:{{ getTaskCheckedCount() }}
+    </div>
       
       <div class='user-block' v-if='this.user'>
         <div class='avatar'>
@@ -296,20 +323,22 @@
         :addTask="addTask" 
         :editTask="editTask" 
         :taskModel="newTask" 
-        title='На складе' 
+        title='Надо сделать' 
         :items="list" 
         name='list' 
         :handlerDragend='handlerDragend'
+        :checked="checked"
       ></board-column>
       <board-column 
         :delTask="delTask" 
         :addTask="addTask" 
         :editTask="editTask" 
         :taskModel="newTask" 
-        title='У курьера' 
+        title='В процессе реализации' 
         :items="inprogress" 
         name='inprogress' 
         :handlerDragend='handlerDragend'
+        :checked="checked"
       >
       </board-column>
       <board-column 
@@ -317,10 +346,11 @@
         :addTask="addTask" 
         :editTask="editTask" 
         :taskModel="newTask" 
-        title='Доставлено' 
+        title='Сделано' 
         :items="done" 
         name='done' 
         :handlerDragend='handlerDragend'
+        :checked="checked"
       >
       </board-column>
     </div>
